@@ -15,11 +15,15 @@ module.exports = function(app) {
     app.post('/todo', urlencodedParser, function(request, response){
         // add data from form to data array
         data.push(request.body);
-        response.json(data);
+        response.render('todo', {todos: data});
+        response.json({todos: data});
     });
 
-    app.delete('/todo', function(request, response){
-
+    app.delete('/todo/:item', function(request, response){
+        data = data.filter(function(todo){
+            return todo.item.replace(/ /g, '-') !== request.params.item;
+        });
+        response.json({todos: data});
     });
 
 };
